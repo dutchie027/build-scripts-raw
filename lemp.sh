@@ -124,8 +124,8 @@ server {
     include snippets.d/deny-composer.conf;
     include snippets.d/add-headers.conf;
 
-    access_log   /var/log/nginx/ssl.pallet.access.log combined;
-    error_log    /var/log/nginx/ssl.pallet.error.log;
+    access_log   /var/log/nginx/ssl.$wsname.access.log combined;
+    error_log    /var/log/nginx/ssl.$wsname.error.log;
 }
 EOF
 tee -a /var/www/lemp/index.php <<EOF
