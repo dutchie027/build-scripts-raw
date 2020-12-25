@@ -141,12 +141,20 @@ ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/lemp
 # Disable external access to PHP-FPM scripts
 sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 useradd lemp
+ram=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
+free=$(((ram/1024)-128-256-8))
+php=$(((free/32)))
+children=$(printf %.0f $php)
 sed -i "s/^\[www\]/\[lemp\]/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^user = www-data/user = lemp/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^group = www-data/group = lemp/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^pm = dynamic/pm = ondemand/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^;pm.process_idle_timeout = 10s;/pm.process_idle_timeout = 10s/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^;pm.max_requests = 500/pm.max_requests = 500/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^pm.max_children = .*/pm.max_children = $children/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^pm.start_servers = .*/;pm.start_servers = 5/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^pm.min_spare_servers = .*/;pm.min_spare_servers = 2/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^pm.max_spare_servers = .*/;pm.max_spare_servers = 2/" /etc/php/7.4/fpm/pool.d/www.conf
 mv /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/lemp.conf
 echo "Restarting Nginx"
 service nginx restart
