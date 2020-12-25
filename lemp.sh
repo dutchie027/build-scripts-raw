@@ -89,6 +89,11 @@ location ~ /\.ht {
 	deny all;
 }
 EOF
+tee -a /etc/nginx/snippets.d/deny-env.conf <<EOF
+location ~ /\.env {
+	deny all;
+}
+EOF
 tee -a /etc/nginx/snippets.d/deny-license-readme.conf <<EOF
 location ~ /(LICENSE.md|README.md) {
 	deny all;
@@ -120,6 +125,7 @@ server {
 
     include snippets.d/deny-git.conf;
     include snippets.d/deny-htaccess.conf;
+    include snippets.d/deny-env.conf;
     include snippets.d/deny-license-readme.conf;
     include snippets.d/deny-composer.conf;
     include snippets.d/add-headers.conf;
