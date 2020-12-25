@@ -41,11 +41,21 @@ apt dist-upgrade -y -q
 clear
 echo "Server updated."
 echo "Installing composer..."
+sleep 2
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+clear
+echo "Composer Successfully Installed"
+echo
+echo "Cleaning Up Directories..."
+sleep 2
 rmdir /var/www/html
 mkdir /var/www/lemp
-chown -R www-data:www-data /var/www/lemp
 rm /etc/nginx/sites-enabled/default
+chown -R www-data:www-data /var/www/lemp
+clear
+echo "Directories cleaned and new ones created."
+echo "Creating supplemental files"
+sleep 2
 tee -a /etc/nginx/sites-available/no-site <<EOF
 # If a client requests for an unknown server name and there's no default server
 # name defined, Nginx will serve the first server configuration found. To
@@ -119,13 +129,21 @@ server {
     error_log    /var/log/nginx/ssl.pallet.error.log;
 }
 EOF
-
+clear
+echo "Supplemental files created"
+echo "Linking Sites..."
+sleep 2
 ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/lemp
-
 # Disable external access to PHP-FPM scripts
 sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
+echo "Restarting Nginx"
 service nginx restart
+echo "Restarting PHP FPM"
 service php7.4-fpm restart
+echo "Installing Certbot"
+sleep 2
 sudo apt install -y certbot python3-certbot-nginx
 apt autoremove -y
-echo "If everything went correct you should be able to visit https://$website"
+certbot --nginx --redirect -d $wsname -m $userem --agree-tos
+clear
+echo "If everything went correct you should be able to visit https://$wsname"
