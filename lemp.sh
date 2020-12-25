@@ -1,21 +1,48 @@
 #!/usr/bin/env bash
 #
-# Disable user promt
+clear
+echo "This script will automate the installation of Nginx, PHP and MariaDB"
+echo "It will ask you for fully qualified name (example.server.com) as well"
+echo "your email address. The email address is simply used to register the"
+echo "SSL Certificate against and also to notify you if the certificate fails"
+echo "to renew every 90 days in an automated fashion"
+echo
+echo
+echo "If you want to exit this script without continuing, please press CTRL-C"
+echo
 read -p "What is the FQDN of the web server: "  wsname
+read -p "What is your email address: "  userem
 echo "Adding Extra PHP and Nginx Repositories"
 add-apt-repository -y ppa:ondrej/php
 add-apt-repository -y ppa:ondrej/nginx-mainline
 echo "Updating APT Libraries..."
 apt update -y -q
+clear
+echo "APT Libraries updated..."
 echo "Installing PHP..."
+sleep 2
 apt install -y -q php7.4-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl}
 apt install unzip -q -y
+clear
+echo "PHP Installed Successfully."
 echo "Installing Nginx..."
+sleep 2
 apt install -y nginx -q
+clear
+echo "Nginx installed."
+echo "Installing MariaDB..."
+sleep 2
+apt install mariadb-server -y
+clear
+echo "MariaDB Installed successfully."
 echo "Updating remaining libraries..."
+sleep 2
 apt dist-upgrade -y -q
-echo "Installing composer"
+clear
+echo "Server updated."
+echo "Installing composer..."
 curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+rmdir /var/www/html
 mkdir /var/www/lemp
 chown -R www-data:www-data /var/www/lemp
 rm /etc/nginx/sites-enabled/default
@@ -82,11 +109,11 @@ server {
 
     error_page  404 /;
 
-    include snippets/deny-git.conf;
-    include snippets/deny-htaccess.conf;
-    include snippets/deny-license-readme.conf;
-    include snippets/deny-composer.conf;
-    include snippets/add-headers.conf;
+    include snippets.d/deny-git.conf;
+    include snippets.d/deny-htaccess.conf;
+    include snippets.d/deny-license-readme.conf;
+    include snippets.d/deny-composer.conf;
+    include snippets.d/add-headers.conf;
 
     access_log   /var/log/nginx/ssl.pallet.access.log combined;
     error_log    /var/log/nginx/ssl.pallet.error.log;
@@ -98,4 +125,7 @@ ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/lemp
 # Disable external access to PHP-FPM scripts
 sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 service nginx restart
+service php7.4-fpm restart
 sudo apt install -y certbot python3-certbot-nginx
+apt autoremove -y
+echo "If everything went correct you should be able to visit https://$website"
