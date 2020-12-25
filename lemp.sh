@@ -51,7 +51,6 @@ sleep 2
 rmdir /var/www/html
 mkdir /var/www/lemp
 rm /etc/nginx/sites-enabled/default
-chown -R www-data:www-data /var/www/lemp
 clear
 echo "Directories cleaned and new ones created."
 echo "Creating supplemental files"
@@ -129,6 +128,11 @@ server {
     error_log    /var/log/nginx/ssl.pallet.error.log;
 }
 EOF
+tee -a /var/www/lemp/index.php <<EOF
+<?php
+phpinfo();
+EOF
+chown -R lemp:lemp /var/www/lemp
 clear
 echo "Supplemental files created"
 echo "Linking Sites..."
@@ -136,6 +140,14 @@ sleep 2
 ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/lemp
 # Disable external access to PHP-FPM scripts
 sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
+useradd lemp
+sed -i "s/^\[www\]/\[lemp\]/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^user = www-data/user = lemp/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^group = www-data/group = lemp/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^pm = dynamic/pm = ondemand/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^;pm.process_idle_timeout = 10s;/pm.process_idle_timeout = 10s/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/^;pm.max_requests = 500/pm.max_requests = 500/" /etc/php/7.4/fpm/pool.d/www.conf
+mv /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/lemp.conf
 echo "Restarting Nginx"
 service nginx restart
 echo "Restarting PHP FPM"
@@ -144,6 +156,12 @@ echo "Installing Certbot"
 sleep 2
 sudo apt install -y certbot python3-certbot-nginx
 apt autoremove -y
-certbot --nginx --redirect -d $wsname -m $userem --agree-tos
+certbot --nginx --redirect -d $wsname -m $userem --agree-tos -n
 clear
 echo "If everything went correct you should be able to visit https://$wsname"
+echo "There is a default index.php created in the web root"
+echo "The web root is: /var/www/lemp"
+echo "The user that runs everything is: lemp"
+echo "MariaDB has also been installed but is using the default configuration"
+echo "You should run mysql_secure_installation and finalize the configuration"
+echo "of MariaDB"
