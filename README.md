@@ -29,11 +29,19 @@ After providing the two above values the script will:
   - xml
   - curl
 - Nginx
-- It will remove the "default" site
+- It will remove the `default` site link `/etc/nginx/sites-enabled/default`
 - It will create a site that 444's any requests not destined for `demo.example.com` (whatever you set it to)
 - It will create a `lemp` user
 - It will remove `/var/www/html`
 - It will create `/var/www/lemp`
+- It will create a `/etc/nginx/snippets.d` directory and put the following files in it (which are later linked)
+  - deny-git.conf
+  - deny-htaccess.conf
+  - deny-license-readme.conf
+  - deny-composer.conf
+  - add-headers.conf
+- It will install the latest version of composer
+- It will create and link a `lemp` site configuration in `/etc/nginx/sites-available/lemp` and link it to `/etc/nginx/sites-enabled/lemp`
 - It will change the PHP7.4-FPM thread to use the `lemp` user
 - It will change the PHP7.4-FPM pool name to `lemp`
 - It will change the PHP-FPM Pool to be Dynamic
