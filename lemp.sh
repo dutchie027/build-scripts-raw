@@ -17,6 +17,15 @@ read -p "What is your email address: "  userem
 resolvedIP=$(nslookup "$wsname" | awk -F':' '/^Address: / { matched = 1 } matched { print $2}' | xargs)
 [[ -z "$resolvedIP" ]] && echo "$wsname" lookup failure && exit || echo "$wsname" resolved to "$resolvedIP"
 
+# now lets check to make sure the email address entered is valud
+regex="^(([A-Za-z0-9]+((\.|\-|\_|\+)?[A-Za-z0-9]?)*[A-Za-z0-9]+)|[A-Za-z0-9]+)@(([A-Za-z0-9]+)+((\.|\-|\_)?([A-Za-z0-9]+)+)*)+\.([A-Za-z]{2,})+$"
+if [[ $userem =~ ${regex} ]]; then
+  echo "Valid emain...continuing"
+else
+  echo "$userem is not a valid email"
+  exit
+fi
+
 echo "Adding Extra PHP and Nginx Repositories"
 add-apt-repository -y ppa:ondrej/php
 add-apt-repository -y ppa:ondrej/nginx-mainline
