@@ -47,4 +47,4 @@ After providing the two above values the script will:
 - It will change the PHP-FPM Pool to be Dynamic
 - It will create an index.php with phpinfo()
 - It will request an SSL cert for `demo.example.com` and associate it and redirect all HTTP requests to HTTPS
-- It will 404 any requests to the root of the web server
+- It will redirect any 404s to the root of the web server
