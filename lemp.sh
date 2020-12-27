@@ -12,6 +12,11 @@ echo "If you want to exit this script without continuing, please press CTRL-C"
 echo
 read -p "What is the FQDN of the web server: "  wsname
 read -p "What is your email address: "  userem
+
+# lets take the "wsname" var and make sure it actually works
+resolvedIP=$(nslookup "$wsname" | awk -F':' '/^Address: / { matched = 1 } matched { print $2}' | xargs)
+[[ -z "$resolvedIP" ]] && echo "$wsname" lookup failure && exit || echo "$wsname" resolved to "$resolvedIP"
+
 echo "Adding Extra PHP and Nginx Repositories"
 add-apt-repository -y ppa:ondrej/php
 add-apt-repository -y ppa:ondrej/nginx-mainline
