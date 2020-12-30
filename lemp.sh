@@ -35,7 +35,7 @@ clear
 echo "APT Libraries updated..."
 echo "Installing PHP..."
 sleep 2
-apt install -y -q php7.4-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl}
+apt install -y -q php7.4-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl,imagick}
 apt install unzip -q -y
 clear
 echo "PHP Installed Successfully."
@@ -126,13 +126,14 @@ server {
 
     index index.php index.html index.htm;
 
+
     location / {
-        try_files \$uri \$uri/ =404;
+    	try_files \$uri \$uri/ /index.php?\$args =404;
     }
 
     location ~ \\.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm-lemp.sock;
     }
 
     error_page  404 /;
@@ -168,6 +169,7 @@ children=$(printf %.0f $php)
 sed -i "s/^\[www\]/\[lemp\]/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^user = www-data/user = lemp/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^group = www-data/group = lemp/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/php7\.4\-fpm\.sock/php7\.4\-fpm\-lemp\.sock/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^pm = dynamic/pm = ondemand/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^;pm.process_idle_timeout = 10s;/pm.process_idle_timeout = 10s/" /etc/php/7.4/fpm/pool.d/www.conf
 sed -i "s/^;pm.max_requests = 500/pm.max_requests = 500/" /etc/php/7.4/fpm/pool.d/www.conf
