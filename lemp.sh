@@ -162,6 +162,7 @@ ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/lemp
 # Disable external access to PHP-FPM scripts
 sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 useradd lemp
+usermod -a -G lemp www-data
 ram=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 free=$(((ram/1024)-128-256-8))
 php=$(((free/32)))
