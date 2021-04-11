@@ -20,7 +20,7 @@ resolvedIP=$(nslookup "$wsname" | awk -F':' '/^Address: / { matched = 1 } matche
 # now lets check to make sure the email address entered is valud
 regex="^(([A-Za-z0-9]+((\.|\-|\_|\+)?[A-Za-z0-9]?)*[A-Za-z0-9]+)|[A-Za-z0-9]+)@(([A-Za-z0-9]+)+((\.|\-|\_)?([A-Za-z0-9]+)+)*)+\.([A-Za-z]{2,})+$"
 if [[ $userem =~ ${regex} ]]; then
-  echo "Valid emain...continuing"
+  echo "Valid email...continuing"
 else
   echo "$userem is not a valid email"
   exit
