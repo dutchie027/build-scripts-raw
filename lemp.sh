@@ -35,7 +35,7 @@ clear
 echo "APT Libraries updated..."
 echo "Installing PHP..."
 sleep 2
-apt install -y -q php7.4-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl,imagick}
+apt install -y -q php-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl,imagick}
 apt install unzip -q -y
 clear
 echo "PHP Installed Successfully."
