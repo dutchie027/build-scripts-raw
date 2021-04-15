@@ -16,7 +16,7 @@ When you run the script it will ask you two questions:
 
 After providing the two above values the script will:
 
-- Install PHP 7.4
+- Install PHP 8.0
   - cli
   - json
   - fpm
@@ -28,6 +28,7 @@ After providing the two above values the script will:
   - common
   - xml
   - curl
+  - zip
 - Nginx
 - It will remove the `default` site link `/etc/nginx/sites-enabled/default`
 - It will create a site that 444's any requests not destined for `demo.example.com` (whatever you set it to)
@@ -42,8 +43,8 @@ After providing the two above values the script will:
   - add-headers.conf
 - It will install the latest version of composer
 - It will create and link a `lemp` site configuration in `/etc/nginx/sites-available/lemp` and link it to `/etc/nginx/sites-enabled/lemp`
-- It will change the PHP7.4-FPM thread to use the `lemp` user
-- It will change the PHP7.4-FPM pool name to `lemp`
+- It will change the PHP8.0-FPM thread to use the `lemp` user
+- It will change the PHP8.0-FPM pool name to `lemp`
 - It will change the PHP-FPM Pool to be Dynamic
 - It will create an index.php with phpinfo()
 - It will request an SSL cert for `demo.example.com` and associate it and redirect all HTTP requests to HTTPS
