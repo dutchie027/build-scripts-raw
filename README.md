@@ -1,6 +1,14 @@
 # build-scripts-raw
 ---
-To build a LEMP host simply run:
+## To build an Asterisk 18 host simply run:
+
+    # source <(curl -s https://raw.githubusercontent.com/dutchie027/build-scripts-raw/main/a18.sh)
+---
+## To build a Smokeping host simlpy run:
+
+    # source <(curl -s https://raw.githubusercontent.com/dutchie027/build-scripts-raw/main/smokeping.sh)
+---
+## To build a LEMP host simply run:
 
     # source <(curl -s https://raw.githubusercontent.com/dutchie027/build-scripts-raw/main/lemp.sh)
 
