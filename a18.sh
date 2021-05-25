@@ -31,6 +31,9 @@ echo
 apt install wget build-essential git autoconf subversion pkg-config libtool -q -y
 echo "Composer Successfully Installed"
 echo
+sleep 2
+echo "Updating the server now..."
+sleep 2
 apt dist-upgrade -y -q
 clear
 echo "Server updated."
