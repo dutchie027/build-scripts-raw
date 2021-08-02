@@ -159,8 +159,6 @@ echo "Supplemental files created"
 echo "Linking Sites..."
 sleep 2
 ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/lemp
-# Disable external access to PHP-FPM scripts
-sed -i "s/^;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/8.0/fpm/php.ini
 useradd lemp
 usermod -a -G lemp www-data
 ram=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
