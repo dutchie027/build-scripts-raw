@@ -99,8 +99,14 @@ server {
 EOF
 ln -s /etc/nginx/sites-available/no-site /etc/nginx/sites-enabled/no-site
 service nginx restart
-sudo apt install -y certbot python3-certbot-nginx
+#sudo apt install -y certbot python3-certbot-nginx
+
+sudo snap install core; sudo snap refresh core
+sudo apt-get remove certbot -y
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot --nginx --redirect -d $wsname -m $userem --agree-tos -n
+
 apt autoremove -y
 clear
 echo "If everything went correct you should be able to visit https://$wsname"
