@@ -26,6 +26,9 @@ else
   exit
 fi
 
+# we'll use the first chunk of the DNS entry for a few things
+dnsstub=$(echo $wsname | cut -d. -f1)
+
 echo "Adding Extra PHP and Nginx Repositories"
 add-apt-repository -y ppa:ondrej/php
 add-apt-repository -y ppa:ondrej/nginx-mainline
@@ -63,7 +66,7 @@ echo
 echo "Cleaning Up Directories..."
 sleep 2
 rmdir /var/www/html
-mkdir /var/www/lemp
+mkdir /var/www/$dnsstub
 rm /etc/nginx/sites-enabled/default
 clear
 echo "Directories cleaned and new ones created."
@@ -119,16 +122,15 @@ add_header X-Frame-Options SAMEORIGIN;
 add_header X-Content-Type-Options nosniff;
 add_header X-XSS-Protection "1; mode=block";
 EOF
-tee -a /etc/nginx/sites-available/lemp <<EOF
+tee -a /etc/nginx/sites-available/$dnsstub <<EOF
 server {
     server_name $wsname;
-    root /var/www/lemp;
+    root /var/www/$dnsstub;
 
-    index index.php index.html index.htm;
-
+    index index.php index.html;
 
     location / {
-    	try_files \$uri \$uri/ /index.php?\$args;
+        try_files \$uri \$uri/ /index.php?\$args;
     }
 
     location ~ \\.php$ {
@@ -149,18 +151,18 @@ server {
     error_log    /var/log/nginx/ssl.$wsname.error.log;
 }
 EOF
-tee -a /var/www/lemp/index.php <<EOF
+tee -a /var/www/$dnssstub/index.php <<EOF
 <?php
 phpinfo();
 EOF
-chown -R lemp:lemp /var/www/lemp
+useradd lemp
+usermod -a -G lemp www-data
+chown -R lemp:lemp /var/www/$dnsstub
 clear
 echo "Supplemental files created"
 echo "Linking Sites..."
 sleep 2
-ln -s /etc/nginx/sites-available/lemp /etc/nginx/sites-enabled/lemp
-useradd lemp
-usermod -a -G lemp www-data
+ln -s /etc/nginx/sites-available/$dnsstub /etc/nginx/sites-enabled/$dnsstub
 ram=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
 free=$(((ram/1024)-128-256-8))
 php=$(((free/32)))
@@ -195,7 +197,7 @@ certbot --nginx --redirect -d $wsname -m $userem --agree-tos -n
 clear
 echo "If everything went correct you should be able to visit https://$wsname"
 echo "There is a default index.php created in the web root"
-echo "The web root is: /var/www/lemp"
+echo "The web root is: /var/www/$dnsstub"
 echo "The user that runs everything is: lemp"
 echo "MariaDB has also been installed but is using the default configuration"
 echo "You should run mysql_secure_installation and finalize the configuration"
