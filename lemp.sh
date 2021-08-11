@@ -26,8 +26,13 @@ else
   exit
 fi
 
-# we'll use the first chunk of the DNS entry for a few things
+# lets look at the name of the DNS record for the web directory
+# if it's www we'll use the actual domain and not www
+# if it's not www we'll use whatever the first chunk is
 dnsstub=$(echo $wsname | cut -d. -f1)
+if [[ $dnsstub =~ "www" ]]; then
+  dnsstub=$(echo $wsname | cut -d. -f2)
+fi
 
 echo "Adding Extra PHP and Nginx Repositories"
 add-apt-repository -y ppa:ondrej/php
