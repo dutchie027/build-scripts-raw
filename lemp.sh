@@ -196,6 +196,7 @@ sudo snap install core; sudo snap refresh core
 sudo apt-get remove certbot -y
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
+sudo systemctl enable nginx
 
 #apt autoremove -y
 certbot --nginx --redirect -d $wsname -m $userem --agree-tos -n
