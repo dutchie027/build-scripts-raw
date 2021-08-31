@@ -156,7 +156,7 @@ server {
     error_log    /var/log/nginx/ssl.$wsname.error.log;
 }
 EOF
-tee -a /var/www/$dnssstub/index.php <<EOF
+tee -a /var/www/$dnsstub/index.php <<EOF
 <?php
 phpinfo();
 EOF
