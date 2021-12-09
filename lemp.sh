@@ -43,7 +43,7 @@ clear
 echo "APT Libraries updated..."
 echo "Installing PHP..."
 sleep 2
-apt install -y -q php-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl,imagick,zip}
+apt install -y -q php8.1-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl,imagick,zip}
 apt install unzip -q -y
 clear
 echo "PHP Installed Successfully."
@@ -140,7 +140,7 @@ server {
 
     location ~ \\.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.0-fpm-lemp.sock;
+        fastcgi_pass unix:/var/run/php/php8.1-fpm-lemp.sock;
     }
 
     error_page  404 /;
@@ -173,21 +173,21 @@ free=$(((ram/1024)-128-256-8))
 php=$(((free/32)))
 children=$(printf %.0f $php)
 sed -i "s/^\[www\]/\[lemp\]/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^user = www-data/user = lemp/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^group = www-data/group = lemp/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/php8\.0\-fpm\.sock/php8\.0\-fpm\-lemp\.sock/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^pm = dynamic/pm = ondemand/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^;pm.process_idle_timeout = 10s;/pm.process_idle_timeout = 10s/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^;pm.max_requests = 500/pm.max_requests = 500/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^pm.max_children = .*/pm.max_children = $children/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^pm.start_servers = .*/;pm.start_servers = 5/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^pm.min_spare_servers = .*/;pm.min_spare_servers = 2/" /etc/php/8.0/fpm/pool.d/www.conf
-sed -i "s/^pm.max_spare_servers = .*/;pm.max_spare_servers = 2/" /etc/php/8.0/fpm/pool.d/www.conf
-mv /etc/php/8.0/fpm/pool.d/www.conf /etc/php/8.0/fpm/pool.d/lemp.conf
+sed -i "s/^user = www-data/user = lemp/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^group = www-data/group = lemp/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/php8\.1\-fpm\.sock/php8\.1\-fpm\-lemp\.sock/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^pm = dynamic/pm = ondemand/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^;pm.process_idle_timeout = 10s;/pm.process_idle_timeout = 10s/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^;pm.max_requests = 500/pm.max_requests = 500/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^pm.max_children = .*/pm.max_children = $children/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^pm.start_servers = .*/;pm.start_servers = 5/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^pm.min_spare_servers = .*/;pm.min_spare_servers = 2/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/^pm.max_spare_servers = .*/;pm.max_spare_servers = 2/" /etc/php/8.1/fpm/pool.d/www.conf
+mv /etc/php/8.0/fpm/pool.d/www.conf /etc/php/8.1/fpm/pool.d/lemp.conf
 echo "Restarting Nginx"
 service nginx restart
 echo "Restarting PHP FPM"
-service php8.0-fpm restart
+service php8.1-fpm restart
 echo "Installing Certbot"
 sleep 2
 #sudo apt install -y certbot python3-certbot-nginx
