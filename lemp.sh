@@ -197,6 +197,7 @@ sudo apt-get remove certbot -y
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo systemctl enable nginx
+sudo ufw allow 'Nginx Full'
 
 #apt autoremove -y
 certbot --nginx --redirect -d $wsname -m $userem --agree-tos -n
