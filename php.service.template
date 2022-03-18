@@ -1,0 +1,17 @@
+[Unit]
+Description=Service Description
+After=network.target syslog.target
+
+[Service]
+Type=forking
+User=username (if you want one), else its root
+ExecStart=/usr/local/bin/script.php
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
+#Copy file to /etc/systemd/system/filename.service
+#sudo systemctl daemon-reload
+#sudo systemctl enable filename.service
+#sudo systemctl start filename.service
