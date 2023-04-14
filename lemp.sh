@@ -45,7 +45,7 @@ clear
 echo "APT Libraries updated..."
 echo "Installing PHP..."
 sleep 2
-apt install -y -q php$phpver-{cli,json,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl,imagick,zip}
+apt install -y -q php$phpver-{cli,fpm,mysql,gd,soap,mbstring,bcmath,common,xml,curl,imagick,zip}
 apt install unzip -q -y
 clear
 echo "PHP Installed Successfully."
