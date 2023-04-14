@@ -177,7 +177,7 @@ children=$(printf %.0f $php)
 sed -i "s/^\[www\]/\[lemp\]/" /etc/php/$phpver/fpm/pool.d/www.conf
 sed -i "s/^user = www-data/user = lemp/" /etc/php/$phpver/fpm/pool.d/www.conf
 sed -i "s/^group = www-data/group = lemp/" /etc/php/$phpver/fpm/pool.d/www.conf
-sed -i "s/php8\.1\-fpm\.sock/php8\.1\-fpm\-lemp\.sock/" /etc/php/$phpver/fpm/pool.d/www.conf
+sed -i "s/php8\.2\-fpm\.sock/php8\.2\-fpm\-lemp\.sock/" /etc/php/$phpver/fpm/pool.d/www.conf
 sed -i "s/^pm = dynamic/pm = ondemand/" /etc/php/$phpver/fpm/pool.d/www.conf
 sed -i "s/^;pm.process_idle_timeout = 10s;/pm.process_idle_timeout = 10s/" /etc/php/$phpver/fpm/pool.d/www.conf
 sed -i "s/^;pm.max_requests = 500/pm.max_requests = 500/" /etc/php/$phpver/fpm/pool.d/www.conf
@@ -185,7 +185,7 @@ sed -i "s/^pm.max_children = .*/pm.max_children = $children/" /etc/php/$phpver/f
 sed -i "s/^pm.start_servers = .*/;pm.start_servers = 5/" /etc/php/$phpver/fpm/pool.d/www.conf
 sed -i "s/^pm.min_spare_servers = .*/;pm.min_spare_servers = 2/" /etc/php/$phpver/fpm/pool.d/www.conf
 sed -i "s/^pm.max_spare_servers = .*/;pm.max_spare_servers = 2/" /etc/php/$phpver/fpm/pool.d/www.conf
-mv /etc/php/8.0/fpm/pool.d/www.conf /etc/php/$phpver/fpm/pool.d/lemp.conf
+mv /etc/php/$phpver/fpm/pool.d/www.conf /etc/php/$phpver/fpm/pool.d/lemp.conf
 echo "Restarting Nginx"
 service nginx restart
 echo "Restarting PHP FPM"
