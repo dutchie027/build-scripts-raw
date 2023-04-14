@@ -34,7 +34,7 @@ if [[ $dnsstub =~ "www" ]]; then
   dnsstub=$(echo $wsname | cut -d. -f2)
 fi
 
-phpver=8.1
+phpver=8.2
 
 echo "Adding Extra PHP and Nginx Repositories"
 add-apt-repository -y ppa:ondrej/php
